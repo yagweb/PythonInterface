@@ -186,7 +186,7 @@ namespace PythonInterface
                     dynamic pydata = np.empty(shape, dtype);
 
                     // Copy the data to that array
-                    System.IntPtr ptr = (System.IntPtr)PyInt.AsInt(pydata.__array_interface__["data"][0]).ToInt32();
+                    System.IntPtr ptr = new System.IntPtr((long)pydata.__array_interface__["data"][0].AsManagedObject(typeof(long)));
                     Marshal.Copy(data, 0, ptr, nbytes);
 
                     // Push the variable to local dictionary
@@ -232,7 +232,7 @@ namespace PythonInterface
                     RunString("__" + name + "__nbytes = " + name + ".nbytes");
                     RunString("__" + name + "__shape = " + name + ".shape");
                     RunString("__" + name + "__dtype = str(" + name + ".dtype)");
-                    System.IntPtr ptr = (System.IntPtr)PyInt.AsInt(Local.GetItem("__" + name + "__ptr")).ToInt32();
+                    System.IntPtr ptr = new System.IntPtr((long)Local.GetItem("__" + name + "__ptr").AsManagedObject(typeof(long)));
                     int nbytes = PyInt.AsInt(Local.GetItem("__" + name + "__nbytes")).ToInt32();
                     string dtype = (string)Local.GetItem("__" + name + "__dtype").AsManagedObject(typeof(string));
                     long[] shape = (long[])Local.GetItem("__" + name + "__shape").AsManagedObject(typeof(long[]));
